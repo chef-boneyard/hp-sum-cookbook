@@ -1,0 +1,7 @@
+name 'hpsum'
+maintainer 'The Authors'
+maintainer_email 'you@example.com'
+license 'all_rights'
+description 'Installs/Configures hpsum'
+long_description 'Installs/Configures hpsum'
+version '0.1.0'
