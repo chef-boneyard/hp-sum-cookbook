@@ -65,7 +65,7 @@ What sort of reports do we want to generate and where do they go? Audit cookbook
 Performs updates
 Call the HPSUM CLI to generate the new XML files based off of each baseline.
 Mounts each HP SUM mount and runs the CLI, generating XML files
-hpsum -s --rewrite|downgrade --location
+hpsum -s --rewrite|downgrade --use_location
 Set environment for permanent HP SUM as an option %TMP%
 rewrite requires preventing multiple runs
 
