@@ -21,6 +21,7 @@ if lastcheck.nil? || (now - interval) > lastcheck
   # hpsum --report --location (requires baseline)
   # node[hpsum][bl].keys.each do |baseline|
   #   baseline.keys.each do |pkg|
+  #     hpsum --report --use_location (requires baseline)
   #     hpsum_package pkg do
   #       action pkg[action]
   #       version pkg[version]

@@ -48,11 +48,11 @@ This recipe checks if a node has run an inventory check within the specified int
 * `['hpsum']['inventory']['lastcheck']` timestamp of last inventory check
 * `['hpsum']['inventory']['interval']` time (in seconds) for the interval policy
 
-The following knife command will generate a query to quickly identify machines out of policy.
+The following knife command provides an example of generating a report to identify machines out of policy.
 
-knife exec check dates report
-
-hpsum --report --use_location (requires baseline)
+```
+    chef exec knife exec example_scripts/inventory_check.rb
+```
 
 ## parse_node_data ##
 Iterates over mount points, pushes XML into node object. Could be used for a compliance report. No changes to the node.
