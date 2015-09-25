@@ -43,10 +43,16 @@ node[hpsum][bl].keys.each do |baseline|
 end
 
 ## inventory_check ##
-Iterates over mount points, generates new XML for future compliance check.
-hpsum --report --use_location (requires baseline)
+This recipe checks if a node has run an inventory check within the specified interval time. If the interval has been exceeded it will run a new inventory check, iterating over the baseline mount points and generating new XML for future compliance checks. These timestamps are stored as the following node attributes:
+
+* `['hpsum']['inventory']['lastcheck']` timestamp of last inventory check
+* `['hpsum']['inventory']['interval']` time (in seconds) for the interval policy
+
+The following knife command will generate a query to quickly identify machines out of policy.
 
 knife exec check dates report
+
+hpsum --report --use_location (requires baseline)
 
 ## parse_node_data ##
 Iterates over mount points, pushes XML into node object. Could be used for a compliance report. No changes to the node.
