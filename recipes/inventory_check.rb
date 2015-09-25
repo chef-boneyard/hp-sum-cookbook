@@ -12,7 +12,7 @@ log "Current time: #{now} Last check: #{lastcheck || 'nil'} Interval: #{interval
 end
 
 # check to see if we are out of interval policy
-if lastcheck.nil? or (now - interval) > lastcheck
+if lastcheck.nil? || (now - interval) > lastcheck
   log 'Running the inventory check' do
     level :info
   end

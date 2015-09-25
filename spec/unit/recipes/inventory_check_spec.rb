@@ -24,8 +24,8 @@ describe 'hp-sum::inventory_check' do
 
   context 'Needs to run inventory check, lastcheck was nil.' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new do |node|
-      end.converge(described_recipe)
+      runner = ChefSpec::SoloRunner.new
+      runner.converge(described_recipe)
     end
 
     it "logs that 'Running the inventory check'" do
@@ -60,5 +60,4 @@ describe 'hp-sum::inventory_check' do
       expect { chef_run }.to_not raise_error
     end
   end
-
 end
