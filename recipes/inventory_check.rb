@@ -3,13 +3,27 @@
 # Recipe:: inventory_check
 #
 
-# get the current timestamp
-# subtract the last timestamp
-#node['hpsum']['inventory']['lastcheck']
-# compare vs. interval policy
-#node['hpsum']['inventory']['interval']
-# if out of policy, iterate over mounts to run inventory checks
+now = Time.now.to_i
+lastcheck = node['hpsum']['inventory']['lastcheck']
+interval = node['hpsum']['inventory']['interval']
 
+log "Current time: #{now} Last check: #{lastcheck || 'nil'} Interval: #{interval}\n" do
+  level :info
+end
+
+# check to see if we are out of interval policy
+if lastcheck.nil? or (now - interval) > lastcheck
+  log 'Running the inventory check' do
+    level :info
+  end
+  node.override['hpsum']['inventory']['lastcheck'] = now
+else
+  log 'No need to run the inventory check, still in policy.' do
+    level :info
+  end
+end
+
+# if out of policy, iterate over mounts to run inventory checks
 # hpsum --report --location (requires baseline)
 # node[hpsum][bl].keys.each do |baseline|
 #   baseline.keys.each do |pkg|
