@@ -44,7 +44,7 @@ end
 
 ## inventory_check ##
 Iterates over mount points, generates new XML for future compliance check.
-hpsum --report --location (requires baseline)
+hpsum --report --use_location (requires baseline)
 
 knife exec check dates report
 
