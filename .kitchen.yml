@@ -6,11 +6,28 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: ubuntu-14.04
+  # RHEL 5, 6, 7
+  # SLES 11, 12
+  # Windows 2008 and later
+  # - name: centos-5.11
+  # - name: centos-6.7
   - name: centos-7.1
 
 suites:
-  - name: default
+  - name: no_previous_check
     run_list:
-      - recipe[hpsum::default]
+      - recipe[hp-sum::inventory_check]
+  - name: window_exceeded
+    run_list:
+      - recipe[hp-sum::inventory_check]
     attributes:
+      hpsum:
+        inventory:
+          lastcheck: 100
+  - name: no_check_needed
+    run_list:
+      - recipe[hp-sum::inventory_check]
+    attributes:
+      hpsum:
+        inventory:
+          lastcheck: <%= Time.now.to_i %>
