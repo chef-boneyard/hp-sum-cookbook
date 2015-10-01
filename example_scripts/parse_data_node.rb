@@ -3,7 +3,7 @@
 require 'nokogiri'
 
 # Read two arguements off CMD line. First arguement is file to be read in.
-# Second arguement is a XPATH double tag search string i.e. "//value//value2 | //value3"
+# Second arguement is a XPATH double tag search string i.e. "//value//value2 | //value3"...
 
 xmlfile = File.open(ARGV[0], "r")
 value = ARGV[1]
