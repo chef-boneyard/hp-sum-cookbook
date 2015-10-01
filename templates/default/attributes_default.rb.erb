@@ -1,0 +1,11 @@
+# timestamp of last inventory check
+default['hpsum']['<%= @cookbook_name %>']['inventory']['lastcheck'] = nil
+
+# time (in seconds) for the interval policy, default is 180 days
+default['hpsum']['<%= @cookbook_name %>']['inventory']['interval'] = 15_552_000
+
+# action to take {upgrade | downgrade | force }
+default['hpsum']['<%= @cookbook_name %>']['action'] = <%= @action %>
+
+# remote mount point of baseline
+default['hpsum']['<%= @cookbook_name %>']['remote_mountpt'] = <%= @remote_mountpt =>
