@@ -50,8 +50,9 @@ mountlist.each do |mountline|
     notifies :disable, "mount[#{local_mountpt}]"
   end
 
-  hp_sum_cookbook_create_role local_mountpt do
+  hp_sum_create_role local_mountpt do
     local_folder local_mount_folder
+    remote_mount remote_mountpt
     action :create
   end
 end
