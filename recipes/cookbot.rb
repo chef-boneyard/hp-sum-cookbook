@@ -44,7 +44,7 @@ mountlist.each do |mountline|
   mount local_mountpt do
     device "#{mounthost}:#{remote_mountpt}"
     fstype 'nfs'
-    options 'rw'
+    options 'ro'
     action [:mount, :enable]
     notifies :umount, "mount[#{local_mountpt}]"
     notifies :disable, "mount[#{local_mountpt}]"
@@ -52,6 +52,7 @@ mountlist.each do |mountline|
 
   hp_sum_create_cookbook local_mountpt do
     local_folder local_mount_folder
+    remote_mount remote_mountpt
     action :create
   end
 end

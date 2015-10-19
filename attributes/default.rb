@@ -9,3 +9,6 @@ default['hpsum']['baseline']['hostip'] = '16.250.24.197'
 default['hpsum']['baseline']['filterstring'] = 'hotfix2'
 # base folder for local mount
 default['hpsum']['baseline']['localmountfolder'] = '/mnt/nfs'
+
+# Mount location for HPSum application
+default['hpsum']['application']['mountpoint'] = '/opt/mount1/hpsum'
