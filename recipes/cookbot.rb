@@ -51,7 +51,11 @@ mountlist.each do |mountline|
   end
 
   hp_sum_create_cookbook local_mountpt do
-    local_folder local_mount_folder
+    remote_mount remote_mountpt
+    remote_ip mounthost
+    nfs_type node['hpsum']['nfs']['type']
+    clean node['hpsum']['local']['clean']
+    local_directory node['hpsum']['local']['directory']
     action :create
   end
 end
