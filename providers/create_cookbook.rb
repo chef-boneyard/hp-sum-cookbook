@@ -9,11 +9,14 @@ action :create do
 
   require 'nokogiri'
 
-  remote_ip = new_resource.remote_ip
-  remote_mount = new_resource.remote_mount
+  remote_fs = new_resource.remote_fs
+  remote_location = new_resource.remote_location
 
-  local_mountpt = new_resource.local_mountpt
+  local_location = new_resource.local_location
+  local_mount = new_resource.local_mount
   local_directory = new_resource.local_directory
+  local_fs = new_resource.local_fs
+  local_mountpt = new_resource.local_mountpt
 
   nfs_type = new_resource.nfs_type
   clean = new_resource.clean
@@ -29,7 +32,6 @@ action :create do
   end
 
   cookbook_name = 'HPSum-' + @doc.css("name_xlate")[0].text.gsub(' ','_')
-  bl_mount = remote_mount
   bl_action = 'upgrade'
   bl_description = @doc.css("description_xlate")[0].text
 
@@ -50,8 +52,9 @@ action :create do
 
   template "/tmp/cookbooks/#{cookbook_name}/attributes/default.rb" do
     source 'attributes_default.rb.erb'
-    variables ({ :action => bl_action, :remote_mount => remote_mount, :remote_ip => remote_ip,
-                 :local_mountpt => local_mountpt, :local_directory => local_directory,
+    variables ({ :action => bl_action,
+                 :remote_fs => remote_fs, :remote_location => remote_location,
+                 :local_location => local_location, :local_mount => local_mount, :local_directory => local_directory,  :local_fs => local_fs,
                  :nfs_type => nfs_type, :clean => clean })
   end
 
@@ -62,7 +65,7 @@ action :create do
 
   template "/tmp/cookbooks/#{cookbook_name}/README.md" do
     source 'README.md.erb'
-    variables ({ :cookbook_name => cookbook_name, :remote_mountpt => remote_mount})
+    variables ({ :cookbook_name => cookbook_name, :remote_location => remote_location})
   end
 
   execute 'Upload Cookbook' do
