@@ -6,7 +6,7 @@ default['hpsum']['inventory']['interval'] = 15_552_000
 # ip of server exporting baseline mounts
 default['hpsum']['baseline']['hostip'] = '16.250.24.197'
 # filterstring to be used when identifying baseline remote mounts
-default['hpsum']['baseline']['filterstring'] = 'hotfix2'
+default['hpsum']['baseline']['filterstring'] = 'spptool'
 
 #######################
 ### Remote File System
