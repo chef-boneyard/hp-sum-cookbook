@@ -26,7 +26,7 @@ end
 mountlist.each do |mountline|
   remote_mountpt = mountline[/^\S+/]
   puts "remote mount point: #{remote_mountpt}"
-
+  Chef::Log.warn("Trying ===========================>#{remote_mountpt}")
   local_mount_folder = remote_mountpt[/\w+$/]
   local_mountpt = "#{node['hpsum']['baseline']['localmountfolder']}/#{local_mount_folder}"
 
@@ -51,13 +51,13 @@ mountlist.each do |mountline|
   end
 
   hp_sum_create_cookbook local_mountpt do
-    remote_fs node['hpsum']['baseline']['remotefs']
+    remote_fs "#{mounthost}:#{remote_mountpt}"
     remote_location node['hpsum']['nfs']['remotelocation']
 
     local_location node['hpsum']['nfs']['locallocation']
     local_mount node['hpsum']['baseline']['localmountfolder']
     local_directory node['hpsum']['local']['directory']
-    local_fs node['hpsum']['baseline']['localfs']
+    local_fs local_mountpt
 
     nfs_type node['hpsum']['nfs']['type']
     clean node['hpsum']['local']['clean']
