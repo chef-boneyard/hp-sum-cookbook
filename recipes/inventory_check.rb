@@ -81,7 +81,7 @@ localhs = "#{localtmp}/localhpsum/"
   when "rw"
     execute 'NFS_rw' do
       command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
-      returns [0,3]
+      returns [0,1,3]
       notifies :umount, "mount[#{hslocalmount}]"
       notifies :umount, "mount[#{bllocalmount}]"
     end
@@ -89,7 +89,7 @@ localhs = "#{localtmp}/localhpsum/"
       execute 'hpsum_ro' do
         command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
         environment 'TMPDIR' => "#{localtmp}"
-        returns [0,3]
+        returns [0,1,3]
         notifies :umount, "mount[#{hslocalmount}]"
         notifies :umount, "mount[#{bllocalmount}]"
       end
@@ -100,13 +100,13 @@ localhs = "#{localtmp}/localhpsum/"
     if ::Dir.exist?(local64)
        execute 'Local_startup_x64' do
          command "#{localtmp}/localhpsum/x64/hpsum_bin_x64 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
-         returns [0,3]
+         returns [0,1,3]
          notifies :umount, "mount[#{bllocalmount}]"
        end
     elsif ::Dir.exist?(local86)
       execute 'Local_startup_x86' do
         command "#{localtmp}/localhpsum/x86/hpsum_bin_x86 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
-        returns [0,3]
+        returns [0,1,3]
         notifies :umount, "mount[#{bllocalmount}]"
       end
     else
