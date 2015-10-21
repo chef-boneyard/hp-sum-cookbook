@@ -39,6 +39,7 @@ combined_report = node['hpsum']['combined_report']
 
 # Delete Report Dir
 directory combined_report do
+  recursive true
   action :delete
 end
 
