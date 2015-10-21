@@ -21,6 +21,7 @@ blremotemount = node['hpsum']['baseline']['remotefs']
 nfstype = node['hpsum']['nfs']['type']
 localtmp = node['hpsum']['local']['directory']
 localhs = "#{localtmp}/localhpsum/"
+combined_report = node['hpsum']['combined_report']
 
  # check to see if we are out of interval policy
  if lastcheck.nil? || (now - interval) > lastcheck
@@ -35,6 +36,16 @@ localhs = "#{localtmp}/localhpsum/"
       action :delete
     end
   end
+
+# Delete Report Dir
+directory combined_report do
+  action :delete
+end
+
+# Create Report Dir
+directory combined_report do
+  action :create
+end
 
   # Mount HP SUM NFS mount point (if required), either due to NFS use model or updating local store (RO)
   case nfstype
@@ -80,14 +91,14 @@ localhs = "#{localtmp}/localhpsum/"
   case nfstype
   when "rw"
     execute 'NFS_rw' do
-      command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
+      command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{combined_report}"
       returns [0,1,3]
       notifies :umount, "mount[#{hslocalmount}]"
       notifies :umount, "mount[#{bllocalmount}]"
     end
   when "ro"
       execute 'hpsum_ro' do
-        command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
+        command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{combined_report}"
         environment 'TMPDIR' => "#{localtmp}"
         returns [0,1,3]
         notifies :umount, "mount[#{hslocalmount}]"
@@ -99,13 +110,13 @@ localhs = "#{localtmp}/localhpsum/"
 
     if ::Dir.exist?(local64)
        execute 'Local_startup_x64' do
-         command "#{localtmp}/localhpsum/x64/hpsum_bin_x64 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
+         command "#{localtmp}/localhpsum/x64/hpsum_bin_x64 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{combined_report}"
          returns [0,1,3]
          notifies :umount, "mount[#{bllocalmount}]"
        end
     elsif ::Dir.exist?(local86)
       execute 'Local_startup_x86' do
-        command "#{localtmp}/localhpsum/x86/hpsum_bin_x86 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
+        command "#{localtmp}/localhpsum/x86/hpsum_bin_x86 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{combined_report}"
         returns [0,1,3]
         notifies :umount, "mount[#{bllocalmount}]"
       end
