@@ -38,8 +38,8 @@ localhs = "#{localtmp}/localhpsum/"
 
   # Mount HP SUM NFS mount point (if required), either due to NFS use model or updating local store (RO)
   case nfstype
-  when "rw"
-    log "Mounting HP SUM NFS FS read-write!" do
+    when "rw"
+      log "Mounting HP SUM NFS FS read-write!" do
       level :info
     end
 
@@ -48,8 +48,8 @@ localhs = "#{localtmp}/localhpsum/"
        fstype 'nfs'
        options 'rw'
     end
-  when "ro"
-    log "Mounting HP SUM NFS FS read-only!" do
+    when "ro"
+      log "Mounting HP SUM NFS FS read-only!" do
       level :info
     end
 
@@ -58,8 +58,9 @@ localhs = "#{localtmp}/localhpsum/"
        fstype 'nfs'
        options 'ro'
     end
-  when "local"
-    log "Using local store in this iteration." do
+
+    when "local"
+      log "Using local store in this iteration." do
       level :info
     end
   end
