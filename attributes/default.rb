@@ -40,3 +40,25 @@ default['hpsum']['nfs']['type'] = 'rw'
 
 # Clean local store repository before and after run - options "nil" or "true"
 default['hpsum']['local']['clean'] = nil
+
+
+#########################
+### Set attributes
+
+# XPATH for attributes to gather from the HP SUM Combined report
+default['hpsum']['combined_report']['firmware_xpath'] = '///inventoryreport'
+default['hpsum']['combined_report']['drivers_xpath'] = '///firmwarereport//system//driver_details//driver'
+
+# Driver name and version xpath from Combined report
+default['hpsum']['swkey_xpath'] = '//driver//swkey'
+default['hpsum']['version_xpath'] = '//driver//version'
+
+# Firmware name and version xpath from Combined report
+default['hpsum']['firmware_name_xpath'] = '//component//name'
+default['hpsum']['firmware_version_xpath'] = '//component//version'
+
+# Component type from Combined report
+default['hpsum']['component_type_xpath'] = '//component//type'
+
+# Name of the HP SUM Combined report for specific baseline
+default['hpsum']['combined_report'] = ‘HPSUM_Combined_Report_baseline.xml’
