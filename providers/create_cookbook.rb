@@ -50,11 +50,14 @@ action :create do
     variables ({ :cookbook_name => cookbook_name})
   end
 
+  combined_report = "HPSUM_Combined_Report_#{cookbook_name}.xml"
+
   template "/tmp/cookbooks/#{cookbook_name}/attributes/default.rb" do
     source 'attributes_default.rb.erb'
     variables ({ :action => bl_action,
                  :remote_fs => remote_fs, :remote_location => remote_location,
                  :local_location => local_location, :local_mount => local_mount, :local_directory => local_directory,  :local_fs => local_fs,
+                 :combined_report => combined_report,
                  :nfs_type => nfs_type, :clean => clean })
   end
 

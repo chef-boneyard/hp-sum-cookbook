@@ -61,4 +61,4 @@ default['hpsum']['firmware_version_xpath'] = '//component//version'
 default['hpsum']['component_type_xpath'] = '//component//type'
 
 # Name of the HP SUM Combined report for specific baseline
-default['hpsum']['combined_report'] = ‘HPSUM_Combined_Report_baseline.xml’
+default['hpsum']['combined_report'] = 'HPSUM_Combined_Report_baseline.xml'
