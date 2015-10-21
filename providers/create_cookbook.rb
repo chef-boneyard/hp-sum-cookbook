@@ -50,6 +50,13 @@ action :create do
     variables ({ :cookbook_name => cookbook_name})
   end
 
+  template "/tmp/cookbooks/#{cookbook_name}/recipes/add_firmware_attributes.rb" do
+    source 'add_firmware_attributes.rb.erb'
+    variables ({ :cookbook_name => cookbook_name})
+  end
+
+
+
   combined_report = "HPSUM_Combined_Report_#{cookbook_name}.xml"
 
   template "/tmp/cookbooks/#{cookbook_name}/attributes/default.rb" do
