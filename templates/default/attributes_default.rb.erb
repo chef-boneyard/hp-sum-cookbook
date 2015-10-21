@@ -40,3 +40,7 @@ default['hpsum']['nfs']['type'] = '<%= @nfs_type %>'
 
 # Clean local store repository before and after run - options "nil" or "true"
 default['hpsum']['local']['clean'] = <%= if @clean == true then 'true' else 'nil' end %>
+
+#########################
+### Sum Report Name
+default['hpsum']['combined_report'] = '<%= @combined_report %>'
