@@ -8,7 +8,7 @@ now = Time.now.to_i
 lastcheck = node['hpsum']['inventory']['lastcheck']
 interval = node['hpsum']['inventory']['interval']
 
-log "Current time: #{now} Last check: #{lastcheck || 'nil'} Interval: #{interval}\n" do
+log "Current time: #{now} Last check: #{lastcheck} Interval: #{interval}\n" do
   level :info
 end
 
@@ -22,11 +22,11 @@ nfstype = node['hpsum']['nfs']['type']
 localtmp = node['hpsum']['local']['directory']
 localhs = "#{localtmp}/localhpsum/"
 
-# check to see if we are out of interval policy
-if lastcheck.nil? || (now - interval) > lastcheck
-  log 'Running the inventory check' do
-    level :info
-  end
+ # check to see if we are out of interval policy
+ if lastcheck.nil? || (now - interval) > lastcheck
+   log 'Running the inventory check' do
+     level :info
+   end
 
   # Delete local HP SUM if necessary - if "true"
   if node['hpsum']['local']['clean']
@@ -38,8 +38,8 @@ if lastcheck.nil? || (now - interval) > lastcheck
 
   # Mount HP SUM NFS mount point (if required), either due to NFS use model or updating local store (RO)
   case nfstype
-  when "rw"
-    log "Mounting HP SUM NFS FS read-write!" do
+    when "rw"
+      log "Mounting HP SUM NFS FS read-write!" do
       level :info
     end
 
@@ -48,8 +48,8 @@ if lastcheck.nil? || (now - interval) > lastcheck
        fstype 'nfs'
        options 'rw'
     end
-  when "ro"
-    log "Mounting HP SUM NFS FS read-only!" do
+    when "ro"
+      log "Mounting HP SUM NFS FS read-only!" do
       level :info
     end
 
@@ -58,8 +58,9 @@ if lastcheck.nil? || (now - interval) > lastcheck
        fstype 'nfs'
        options 'ro'
     end
-  when "local"
-    log "Using local store in this iteration." do
+
+    when "local"
+      log "Using local store in this iteration." do
       level :info
     end
   end
@@ -80,13 +81,17 @@ if lastcheck.nil? || (now - interval) > lastcheck
   when "rw"
     execute 'NFS_rw' do
       command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
-      ignore_failure true
+      returns [0,3]
+      notifies :umount, "mount[#{hslocalmount}]"
+      notifies :umount, "mount[#{bllocalmount}]"
     end
   when "ro"
       execute 'hpsum_ro' do
         command "#{hslocalmount}/bin/hpsum -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
         environment 'TMPDIR' => "#{localtmp}"
-        ignore_failure true
+        returns [0,3]
+        notifies :umount, "mount[#{hslocalmount}]"
+        notifies :umount, "mount[#{bllocalmount}]"
       end
   when "local"
     local64 = "#{localtmp}/localhpsum/x64"
@@ -95,37 +100,21 @@ if lastcheck.nil? || (now - interval) > lastcheck
     if ::Dir.exist?(local64)
        execute 'Local_startup_x64' do
          command "#{localtmp}/localhpsum/x64/hpsum_bin_x64 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
-         ignore_failure true
+         returns [0,3]
+         notifies :umount, "mount[#{bllocalmount}]"
        end
     elsif ::Dir.exist?(local86)
       execute 'Local_startup_x86' do
         command "#{localtmp}/localhpsum/x86/hpsum_bin_x86 -s -use_location #{bllocalmount} -report -combined_report -reportdir #{localtmp}"
-        ignore_failure true
+        returns [0,3]
+        notifies :umount, "mount[#{bllocalmount}]"
       end
     else
       log "There is no local store under #{localtmp}, exiting without update." do
         level :info
+        notifies :umount, "mount[#{bllocalmount}]"
       end
     end
-  end
-
-  # Clean Up - unmount NFS mounts
-  log "Cleaning up NFS mount-points!!" do
-    level :info
-  end
-
-  # Baseline mount point
-  mount bllocalmount do
-    device blremotemount
-    fstype 'nfs'
-    action :umount
-  end
-
-  # HP SUM mount point - will attempt even if local
-  mount hslocalmount do
-    device hsremotemount
-    fstype 'nfs'
-    action :umount
   end
 
   # Remove local store if required - if "true"
@@ -136,7 +125,7 @@ if lastcheck.nil? || (now - interval) > lastcheck
     end
   end
 
-  node.override['hpsum']['inventory']['lastcheck'] = now
+  node.normal['hpsum']['inventory']['lastcheck'] = now
 else
   log 'No need to run the inventory check, still in policy.' do
     level :info
