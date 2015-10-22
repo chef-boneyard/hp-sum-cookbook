@@ -9,7 +9,7 @@ require 'nokogiri'
 require 'pry'
 
 
-report = File.expand_path(node['hpsum']['combined_report']+ "/^(HPSUM_Combined_Report_)(.*)(xml)$")
+report = node['hpsum']['local']['directory'] + ['hpsum']['combined_report']
 xmlfile = File.open(report)
 
 @doc = Nokogiri::XML(File.open(xmlfile))
